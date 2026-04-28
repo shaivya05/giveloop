@@ -14,6 +14,14 @@ app.use(express.json())
 const authRoutes = require('./routes/authRoutes')
 app.use('/api/auth', authRoutes)
 
+const itemRoutes = require('./routes/itemRoutes')
+app.use('/api/items', itemRoutes)
+
+const ngoRoutes = require('./routes/ngoRoutes')
+app.use('/api/ngos', ngoRoutes)
+
+const pickupRoutes = require('./routes/pickupRoutes')
+app.use('/api/pickups', pickupRoutes)
 // Test route
 app.get('/', (req, res) => {
   res.json({ message: 'GiveLoop API is running 🚀' })
