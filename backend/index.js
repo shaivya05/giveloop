@@ -22,6 +22,9 @@ app.use('/api/ngos', ngoRoutes)
 
 const pickupRoutes = require('./routes/pickupRoutes')
 app.use('/api/pickups', pickupRoutes)
+
+const impactRoutes = require('./routes/impactRoutes')
+app.use('/api/impact', impactRoutes)
 // Test route
 app.get('/', (req, res) => {
   res.json({ message: 'GiveLoop API is running 🚀' })

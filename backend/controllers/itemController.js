@@ -1,5 +1,5 @@
 const prisma = require('../utils/prismaClient')
-
+const { categorizeItem, matchNGO } = require('../utils/aiHelper')
 // Create a new donation item (donor only)
 const createItem = async (req, res) => {
   try {
@@ -132,10 +132,70 @@ const deleteItem = async (req, res) => {
   }
 }
 
+// AI categorize item
+const aiCategorize = async (req, res) => {
+  try {
+    const { title, description } = req.body
+
+    const result = await categorizeItem(title, description)
+
+    res.json({
+      message: 'AI categorization complete',
+      result
+    })
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Server error' })
+  }
+}
+
+// AI match item to best NGO
+const aiMatchNGO = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    // Get item with donor info
+    const item = await prisma.item.findUnique({
+      where: { id },
+      include: {
+        donor: {
+          select: { city: true }
+        }
+      }
+    })
+
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' })
+    }
+
+    // Get all NGOs
+    const ngos = await prisma.nGO.findMany()
+
+    if (ngos.length === 0) {
+      return res.status(404).json({ message: 'No NGOs available' })
+    }
+
+    // Ask AI to match
+    const match = await matchNGO(item, ngos)
+
+    res.json({
+      message: 'AI matching complete',
+      match
+    })
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Server error' })
+  }
+}
+
 module.exports = { 
   createItem, 
   getAllItems, 
   getMyItems, 
   getItemById, 
-  deleteItem 
+  deleteItem,
+  aiCategorize,
+  aiMatchNGO
 }

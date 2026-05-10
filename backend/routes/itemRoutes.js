@@ -6,9 +6,10 @@ const {
   getAllItems,
   getMyItems,
   getItemById,
-  deleteItem
+  deleteItem,
+  aiCategorize,
+  aiMatchNGO
 } = require('../controllers/itemController')
-
 // Donor creates item
 router.post('/', protect, restrictTo('donor'), createItem)
 
@@ -24,4 +25,6 @@ router.get('/:id', protect, getItemById)
 // Donor deletes their item
 router.delete('/:id', protect, restrictTo('donor'), deleteItem)
 
+router.post('/ai/categorize', protect, restrictTo('donor'), aiCategorize)
+router.get('/ai/match/:id', protect, restrictTo('ngo'), aiMatchNGO)
 module.exports = router
