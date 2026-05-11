@@ -6,7 +6,13 @@ dotenv.config()
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://giveloop-six.vercel.app'
+  ],
+  credentials: true
+}))
 app.use(express.json())
 
 const authRoutes = require('./routes/authRoutes')
