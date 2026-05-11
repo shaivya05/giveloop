@@ -9,7 +9,7 @@ const app = express()
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://giveloop-six.vercel.app'
+    'https://giveloop-git-main-shaivyas-projects.vercel.app'
   ],
   credentials: true
 }))
