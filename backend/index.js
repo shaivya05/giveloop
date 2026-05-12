@@ -6,13 +6,31 @@ dotenv.config()
 
 const app = express()
 
+// CORS — must be before everything else
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://giveloop-six.vercel.app',
+  'https://giveloop-git-main-shaivyas-projects.vercel.app'
+]
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin)
+  }
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end()
+  }
+  next()
+})
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://giveloop-git-main-shaivyas-projects.vercel.app'
-  ],
+  origin: allowedOrigins,
   credentials: true
 }))
+
 app.use(express.json())
 
 const authRoutes = require('./routes/authRoutes')
@@ -34,9 +52,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/protected', protect, (req, res) => {
-  res.json({ 
-    message: 'You are authorized!', 
-    user: req.user 
+  res.json({
+    message: 'You are authorized!',
+    user: req.user
   })
 })
 
