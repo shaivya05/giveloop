@@ -3,8 +3,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/:path*',
-        destination: 'https://giveloop-backend.onrender.com/api/:path*'
+        source: '/backend/:path*',
+        destination: 'https://giveloop.onrender.com/api/:path*'
       }
     ]
   }
